@@ -24,6 +24,23 @@ export default function MkdSDK() {
       password,
       role
     };
+    
+    const loginResult = await fetch(
+      this._baseurl + `/v1/api/auth/login`,
+      {
+        method: "post",
+        headers: header,
+        body: JSON.stringify(payload),
+      }
+    );
+    const jsonLogin = await loginResult.json();
+  
+    if (loginResult.status === 200) {
+      localStorage.setItem("token", jsonLogin.token);
+      return jsonLogin;
+    }
+  
+    throw new Error(jsonLogin.message);
   };
 
   this.getHeader = function () {
